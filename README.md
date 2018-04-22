@@ -6,6 +6,12 @@
 
 - 缺乏对数量词的分析。假新闻中对于数据的造假是很普遍的，但是原始的CRA方法仅仅是通过连接名词短语来实现的。
 
+# 实现效果
+
+文章摘自[习近平致信祝贺首届数字中国建设峰会开幕](http://www.xinhuanet.com/2018-04/22/c_1122722221.htm)，最终效果图如下：
+
+!()[http://7xqjkf.com1.z0.glb.clouddn.com/graph.svg]
+
 参考资料
 
 - Corman, S. R., Kuhn, T., McPhee, R., and K. Dooley (2002). Studying Complex Discursive Systems: Centering Resonance Analysis of Communication. Human Communication Research, 28(2), 157-206.
@@ -16,11 +22,16 @@
 
 本项目使用Neo4j作为图数据库存储单词与单词之间的关系，所以需要指定图数据库的uri、dbname和password。
 
-所以在使用时需要创建conf.py，然后添加一些相关常亮:
+所以在使用时需要创建conf.py，然后添加一些相关配置
 
 - neo4j_cra_uri: neo4j的uri
 - neo4j_cra_db: neo4j的数据库名
 - neo4j_cra_psw: neo4j的密码
+
+但是目前仍然存在一些问题
+
+- 在节点合并时效率过低
+- neo4j存储时必须是有向图，虽然查询时可以忽略，但是对于查看数据图有很大的影响
 
 ---
 
