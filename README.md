@@ -1,6 +1,6 @@
 # Centering Resonance Analysis (CRA)
 
-![](https://img.shields.io/travis/USER/REPO.svg) ![](https://img.shields.io/badge/version-v0.0.1-brightgreen.svg) ![](https://img.shields.io/badge/neo4j-v3.x.x-blue.svg) ![](https://img.shields.io/badge/python-v3.x-blue.svg)
+![](https://img.shields.io/appveyor/ci/gruntjs/grunt.svg) ![](https://img.shields.io/badge/version-v0.0.1-brightgreen.svg) ![](https://img.shields.io/badge/neo4j-v3.x.x-blue.svg) ![](https://img.shields.io/badge/python-v3.x-blue.svg)
 
 这个项目是对Centering Resonance Analysis(CRA)的实现，其主要针对于中文语言的实现。
 
