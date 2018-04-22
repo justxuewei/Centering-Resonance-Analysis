@@ -1,4 +1,6 @@
-### 关于此项目
+### Centering Resonance Analysis (CRA)
+
+![](https://img.shields.io/badge/version-v0.0.1-brightgreen.svg)
 
 这个项目是对Centering Resonance Analysis(CRA)的实现，其主要针对于中文语言的实现。
 
@@ -10,7 +12,7 @@
 
 文章摘自[习近平致信祝贺首届数字中国建设峰会开幕](http://www.xinhuanet.com/2018-04/22/c_1122722221.htm)，最终效果图如下：
 
-<img src="./images/cra_result.svg"/>
+![](https://res.niuxuewei.com/group.svg)
 
 参考资料
 
