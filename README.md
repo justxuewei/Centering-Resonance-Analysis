@@ -14,6 +14,16 @@
 
 ---
 
+本项目使用Neo4j作为图数据库存储单词与单词之间的关系，所以需要指定图数据库的uri、dbname和password。
+
+所以在使用时需要创建conf.py，然后添加一些相关常亮:
+
+- neo4j_cra_uri: neo4j的uri
+- neo4j_cra_db: neo4j的数据库名
+- neo4j_cra_psw: neo4j的密码
+
+---
+
 联系我
 
 - E-Mail: a@niuxuewei.com

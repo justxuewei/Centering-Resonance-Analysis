@@ -2,10 +2,9 @@ import jieba.posseg as pseg
 import re
 
 
-def select(string, debug=False):
+def select(string):
     """
     将输入的文本转换为名词词组
-    :type debug: 调试模式
     :param string: 文本
     :return: 元祖，(名词词组, 带词性的词组)
     """
@@ -31,17 +30,11 @@ def select(string, debug=False):
     for l in words_with_mark:
         counter += 1
         if re.match(reg, l.flag):
-            if debug:
-                noun_words.append({
-                    'word': l.word,
-                    'flag': l.flag,
-                    'index': counter
-                })
-            else:
-                noun_words.append({
-                    'word': l.word,
-                    'index': counter
-                })
+            noun_words.append({
+                'word': l.word,
+                'flag': l.flag,
+                'index': counter
+            })
     return noun_words, words_with_mark
 
 
