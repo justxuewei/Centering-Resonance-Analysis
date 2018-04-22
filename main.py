@@ -9,4 +9,6 @@ if __name__ == '__main__':
     noun_words, all_words = prepcs.select(text)
     neo4j_handler.delete_nodes_by_label('default')
     stn.create_nodes(neo4j_handler, 'default', noun_words)
-    stn.create_relationship_by_noun_phrase(neo4j_handler, 'default', noun_words)
+    stn.create_relationship_by_np(neo4j_handler, 'default', noun_words)
+    stn.create_relationship_by_nanp(neo4j_handler, 'default', noun_words)
+    stn.merge_same_word_nodes(neo4j_handler, 'default', noun_words)
