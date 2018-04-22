@@ -10,7 +10,7 @@
 
 文章摘自[习近平致信祝贺首届数字中国建设峰会开幕](http://www.xinhuanet.com/2018-04/22/c_1122722221.htm)，最终效果图如下：
 
-!()[http://7xqjkf.com1.z0.glb.clouddn.com/graph.svg]
+![http://7xqjkf.com1.z0.glb.clouddn.com/graph.svg]()
 
 参考资料
 
