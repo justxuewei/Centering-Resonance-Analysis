@@ -1,21 +1,22 @@
-def create_nodes(handler, article, noun_words):
+from py2neo import Node, Relationship
+
+
+def create_nodes(neo4j, article, noun_words):
     """
     根据名词词组创建节点(node)
-    :param handler: neo4j handler
+    :param neo4j: neo4j handler
     :param article: 文章标题
     :param noun_words: 名词词组
     :return: none
     """
-    cypher = 'create '
+    tx = neo4j.begin()
     for i, noun_word in enumerate(noun_words):
         word = noun_word['word']
         flag = noun_word['flag']
         index = noun_word['index']
-        cypher += '(:%s {word: "%s", index: %d, flag: "%s"})' % (article, word, index, flag)
-        if (i + 1) != len(noun_words):
-            cypher += ", "
+        tx.create(Node(article, word=word, index=index, flag=flag))
 
-    handler.cypher_executor(cypher)
+    tx.commit()
 
 
 def create_relationship_by_np(handler, article, noun_words):

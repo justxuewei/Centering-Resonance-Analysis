@@ -23,8 +23,7 @@ class Neo4jHandler:
         :return: none
         """
         with self.driver.session() as session:
-            with session.begin_transaction() as tx:
-                tx.run(cypher, parameters=params)
+            session.run(cypher, parameters=params)
 
     def delete_nodes_by_label(self, label):
         """
@@ -42,37 +41,21 @@ class Neo4jHandler:
         :return: 返回数据的结构为 [{...}, {...}, ...]
         """
         with self.driver.session() as session:
-            with session.begin_transaction() as tx:
-                data = []
-                for record in tx.run(cypher).records():
-                    record_str = str(record)
-                    reg = 'properties=(.+)>>$'
-                    m = re.search(reg, record_str)
-                    if m:
-                        json_str = m.group(1)
-                        json_str = json_str.replace("'", '"')
-                        item = json.loads(json_str)
-                        print(item)
-                        data.append(item)
-                return data
-
-    def list_reader(self, cypher, keys):
-        """
-        执行cypher命令读数据，以list方式返回数据，可以通过keys控制获取的列
-        :param cypher: 命令
-        :param keys: 执行命令后返回的列
-        :return: 返回数据的结构为 [[...], [...], ...].
-        """
-        with self.driver.session() as session:
-            with session.begin_transaction() as tx:
-                data = []
-                result = tx.run(cypher)
-                for record in result:
-                    rows = []
-                    for key in keys:
-                        rows.append(record[key])
-                    data.append(rows)
-                return data
+            # with session.begin_transaction() as tx:
+            data = []
+            run = session.run(cypher)
+            for record in run.records():
+                print(str(record))
+                record_str = str(record)
+                reg = 'properties=(.+)>>$'
+                m = re.search(reg, record_str)
+                if m:
+                    json_str = m.group(1)
+                    json_str = json_str.replace("'", '"')
+                    item = json.loads(json_str)
+                    print(item)
+                    data.append(item)
+            return data
 
     def dict_reader_opted(self, cypher, keys=None):
         """

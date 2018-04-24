@@ -1,14 +1,29 @@
 from neo4j_op.Neo4j import get_neo4j_handler
 import textprocessing.pre_processing as prepcs
 import textprocessing.save_to_neo4j as stn
+import analysis.cra as cra
+from py2neo import Graph, Node, Relationship, NodeSelector
+from pandas import DataFrame
 
-if __name__ == '__main__':
-    neo4j_handler = get_neo4j_handler()
 
+def init(neo4j):
     text = prepcs.load_text()
     noun_words, all_words = prepcs.select(text)
-    neo4j_handler.delete_nodes_by_label('default')
-    stn.create_nodes(neo4j_handler, 'default', noun_words)
-    stn.create_relationship_by_np(neo4j_handler, 'default', noun_words)
-    stn.create_relationship_by_nanp(neo4j_handler, 'default', noun_words)
-    stn.merge_same_word_nodes(neo4j_handler, 'default', noun_words)
+    stn.create_nodes(neo4j, 'default', noun_words)
+    # stn.create_relationship_by_np(neo4j, 'default', noun_words)
+    # stn.create_relationship_by_nanp(neo4j, 'default', noun_words)
+    # stn.merge_same_word_nodes(neo4j, 'default', noun_words)
+
+
+def analysis(handler):
+    result = cra.betweenness_centrality(handler)
+    return result
+
+
+if __name__ == '__main__':
+    neo4j_cra = Graph(password="wqnmlgb")
+    # init(neo4j_cra)
+    selector = NodeSelector(neo4j_cra)
+    node = selector.select('default').where(index=440).first()
+    print(node)
+
