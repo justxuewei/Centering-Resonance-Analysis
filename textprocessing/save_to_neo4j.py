@@ -1,4 +1,4 @@
-from py2neo import Node, Relationship
+from py2neo import Node, Relationship, NodeSelector
 
 
 def create_nodes(neo4j, article, noun_words):
@@ -19,11 +19,11 @@ def create_nodes(neo4j, article, noun_words):
     tx.commit()
 
 
-def create_relationship_by_np(handler, article, noun_words):
+def create_relationship_by_np(neo4j, article, noun_words):
     """
     根据名词短语(np)创建关系
     创建的策略是相邻名词短语相连，如果相连接节点大于等于3则节点首尾相连
-    :param handler: neo4j handler
+    :param neo4j: neo4j handler
     :param article: 文章标题
     :param noun_words: 名词词组
     :return: none
@@ -31,6 +31,7 @@ def create_relationship_by_np(handler, article, noun_words):
     counter = 1
     params = {}
     relationship_data = []
+
     for i, noun_word in enumerate(noun_words):
         row_relationship_data = {}
         word = noun_word['word']
@@ -65,13 +66,13 @@ def create_relationship_by_np(handler, article, noun_words):
         match (b:%s) where b.index = row.b_index
         create (a)-[r:NP]->(b)
     """ % (article, article)
-    handler.cypher_executor(cypher, params=params)
+    neo4j.run(cypher, parameters=params)
 
 
-def create_relationship_by_nanp(handler, article, noun_words):
+def create_relationship_by_nanp(neo4j, article, noun_words):
     """
     创建不相邻名词(not adjacent noun phrase)的关系
-    :param handler: neo4j handler
+    :param neo4j: neo4j handler
     :param article: 文章标题
     :param noun_words: 名词词组
     :return: none
@@ -100,13 +101,13 @@ def create_relationship_by_nanp(handler, article, noun_words):
             match (b:%s) where b.index = row.b_index
             create (a)-[r:NANP]->(b)
         """ % (article, article)
-    handler.cypher_executor(cypher, params=params)
+    neo4j.run(cypher, parameters=params)
 
 
-def merge_same_word_nodes(handler, article, noun_words):
+def merge_same_word_nodes(neo4j, article, noun_words):
     """
     合并相同节点并保留原始关系
-    :param handler: neo4j handler
+    :param neo4j: neo4j handler
     :param article: 文章标题
     :param noun_words: 名词词组
     :return: none
@@ -137,12 +138,19 @@ def merge_same_word_nodes(handler, article, noun_words):
             match_cypher += ' return distinct b'
             delete_cypher += ' detach delete a'
 
-            # print('cypher: ' + match_cypher)
-            # print(delete_cypher)
-
-            nodes = handler.dict_reader(match_cypher)
-            print(nodes)
-            handler.cypher_executor(delete_cypher)
+            # 获取除最后一个节点
+            nodes = neo4j.data(match_cypher)
+            batch_node_indexs = []
+            for n in nodes:
+                _index = n['b']['index']
+                _relationship_cypher = 'match p=(a:%s)--(b:%s) where a.index = %d and b.index = %d return p' % (
+                    article, article, _index, last_idx)
+                # print(_relationship_cypher)
+                _relationship = neo4j.data(_relationship_cypher)
+                # print(_relationship)
+                if not _relationship:
+                    batch_node_indexs.append({'index': _index})
+            neo4j.run(delete_cypher)
 
             create_relationship_cypher = """
                 unwind $batch as row
@@ -150,4 +158,4 @@ def merge_same_word_nodes(handler, article, noun_words):
                 match (b:%s) where b.index = row.index
                 create (a)-[r:MNP]->(b)
             """ % (article, last_idx, article)
-            handler.cypher_executor(create_relationship_cypher, params={"batch": nodes})
+            neo4j.run(create_relationship_cypher, parameters={"batch": batch_node_indexs})
