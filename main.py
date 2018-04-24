@@ -1,7 +1,7 @@
 import textprocessing.pre_processing as prepcs
 import textprocessing.save_to_neo4j as stn
 import analysis.cra as cra
-from py2neo import Graph, Node, Relationship, NodeSelector
+from py2neo import Graph
 from conf import *
 
 
@@ -21,6 +21,6 @@ def analysis(neo4j):
 
 if __name__ == '__main__':
     neo4j_cra = Graph(bolt=neo4j_cra_blot, host=neo4j_cra_host, user=neo4j_cra_db, password="wqnmlgb")
-    # neo4j_cra.delete_all()
-    # init(neo4j_cra)
+    neo4j_cra.delete_all()
+    init(neo4j_cra)
     result = analysis(neo4j_cra)
