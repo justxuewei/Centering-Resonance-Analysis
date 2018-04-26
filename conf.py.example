@@ -1,0 +1,4 @@
+neo4j_cra_host = "localhost"
+neo4j_cra_blot = True
+neo4j_cra_db = "database_name"  # default db_name is "neo4j"
+neo4j_cra_psw = "password"

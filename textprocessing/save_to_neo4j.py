@@ -9,6 +9,7 @@ def create_nodes(neo4j, article, noun_words):
     :param noun_words: 名词词组
     :return: none
     """
+    print('[%s]: create_nodes...' % article)
     tx = neo4j.begin()
     for i, noun_word in enumerate(noun_words):
         word = noun_word['word']
@@ -28,6 +29,7 @@ def create_relationship_by_np(neo4j, article, noun_words):
     :param noun_words: 名词词组
     :return: none
     """
+    print('[%s]: create_relationship_by_np...' % article)
     counter = 1
     params = {}
     relationship_data = []
@@ -77,6 +79,7 @@ def create_relationship_by_nanp(neo4j, article, noun_words):
     :param noun_words: 名词词组
     :return: none
     """
+    print('[%s]: create_relationship_by_nanp...' % article)
     params = {}
     relationship_data = []
     for i, noun_word in enumerate(noun_words):
@@ -112,6 +115,7 @@ def merge_same_word_nodes(neo4j, article, noun_words):
     :param noun_words: 名词词组
     :return: none
     """
+    print('[%s]: merge_same_word_nodes...' % article)
     word_times = {}
     for noun_word in noun_words:
         word = noun_word['word']
@@ -159,3 +163,4 @@ def merge_same_word_nodes(neo4j, article, noun_words):
                 create (a)-[r:MNP]->(b)
             """ % (article, last_idx, article)
             neo4j.run(create_relationship_cypher, parameters={"batch": batch_node_indexs})
+    # print('[%s]: insert done!' % article)

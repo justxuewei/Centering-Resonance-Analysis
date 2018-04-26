@@ -38,7 +38,7 @@ def select(string):
     return noun_words, words_with_mark
 
 
-def load_text(path="text/default.txt"):
+def load_text(path="datasets/default.txt"):
     """
     文本输入，输入的文本编码格式为utf-8
     :param path: 路径，默认text/default.txt
@@ -52,3 +52,33 @@ def load_text(path="text/default.txt"):
         file.close()
 
     return text
+
+
+def text_parser_for_sohu_dataset(text):
+    """
+    文本解析器，用于搜狐比赛数据集
+    :param text: 原始文本
+    :return: 结构化数据字典
+    """
+    text_array = text.split('\t')
+    return {
+        "article": text_array[0],
+        "content": text_array[1],
+        "pics": text_array[2]
+    }
+    # reg = '(D\d{7})(.*?)((P\d{7}\.JPEG.*\.JPEG)|(NULL))'
+    # match_iteration = re.finditer(reg, text)
+    structure_text = []
+    # if match_iteration:
+    #     for match in match_iteration:
+    #         article = match.group(1)
+    #         content = match.group(2)
+    #         pics = match.group(3)
+    #         structure_text.append({
+    #             "article": article,
+    #             "content": content,
+    #             "pics": pics
+    #         })
+    # else:
+    #     print("The data cannot be parsed by embedded regex expression.")
+    # return structure_text
