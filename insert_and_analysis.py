@@ -23,7 +23,7 @@ def insert(neo4j, cont):
     print('[%s]: done!' % article)
 
 
-def analysis(neo4j, article, cur):
+def cra_analysis(neo4j, article, cur, db):
     print('[%s]: analysis...' % article)
     bc = cra.betweenness_centrality(neo4j, article)
     for b in bc:
@@ -33,6 +33,7 @@ def analysis(neo4j, article, cur):
               'values (CRA_BC_ID_SEQ.nextval, \'%s\', \'%s\', %.18f, %d, \'%s\')' \
               % (article, _word, b['centrality'], b['index'], b['flag'])
         cur.execute(sql)
+        db.commit()
 
 
 if __name__ == '__main__':
@@ -64,17 +65,24 @@ if __name__ == '__main__':
             futures.append(pool.submit(insert, neo4j_cra, text_dict))
             line = file.readline()
         wait(futures)
-        # cursor.close()
         logger.info("第%d组存入neo4j数据库完成" % i)
         gc.collect()
+    pool.shutdown()
 
     with cx_Oracle.connect('cra/cra@192.168.199.130:1521/orcl') as orcl_cra:
+        pool1 = ThreadPoolExecutor(max_workers=2)
         for i in range(1, 11):
+            futures1 = []
             logger.info("第%d组开始分析" % i)
             cursor = orcl_cra.cursor()
             file = open('./datasets/biendata/groups/News_info_train_filter_%d.txt' % i, encoding='utf-8')
             line = file.readline()
-            text_dict = prepcs.text_parser_for_sohu_dataset(line)
-            analysis(neo4j_cra, text_dict['article'], cursor)
-            orcl_cra.commit()
+            while line:
+                text_dict = prepcs.text_parser_for_sohu_dataset(line)
+                cra_analysis(neo4j_cra, text_dict['article'], cursor, orcl_cra)
+                # futures1.append(pool1.submit(cra_analysis, neo4j_cra, text_dict['article'], cursor, orcl_cra))
+                line = file.readline()
+            # wait(futures1)
+            file.close()
             logger.info("第%d组分析结束" % i)
+        pool1.shutdown()
