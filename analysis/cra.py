@@ -1,7 +1,12 @@
 # coding=utf-8
 
 
-def betweenness_centrality(neo4j, article):
+def betweenness_centrality(neo4j, article, selector, logger):
+    # inspect the node whether is existed
+    node = selector.select(article).first()
+    if not node:
+        logger.error("%s is not existed" % article)
+        return None
     centrality_cypher = "CALL algo.betweenness.stream('%s', null, {direction:'both'}) " \
              "YIELD nodeId, centrality RETURN nodeId,centrality order by centrality desc;" % article
 

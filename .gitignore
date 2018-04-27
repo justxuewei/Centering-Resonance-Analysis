@@ -1,5 +1,5 @@
 # Created by .ignore support plugin (hsz.mobi)
-conf.py
+./conf.py
 .idea/
 ./text/biendata
 ./main.py

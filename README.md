@@ -1,6 +1,6 @@
 # Centering Resonance Analysis (CRA)
 
-![](https://img.shields.io/appveyor/ci/gruntjs/grunt.svg) ![](https://img.shields.io/badge/version-v1.0.0-brightgreen.svg) ![](https://img.shields.io/badge/neo4j-v3.3.5-blue.svg) ![](https://img.shields.io/badge/python-v3.6-blue.svg)
+![](https://img.shields.io/appveyor/ci/gruntjs/grunt.svg) ![](https://img.shields.io/badge/version-v1.0.1-brightgreen.svg) ![](https://img.shields.io/badge/neo4j-v3.3.5-blue.svg) ![](https://img.shields.io/badge/python-v3.6-blue.svg)
 
 这个项目是对Centering Resonance Analysis(CRA)的实现，其主要针对于中文语言的实现。在v1.0.0中，使用py2neo代替原先neo4j-driver，同时关系不会重复添加，生成的图具有更好的效果。
 
