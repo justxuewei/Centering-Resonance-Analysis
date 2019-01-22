@@ -35,7 +35,7 @@
 
 ---
 
-联系我
+Contact
 
-- E-Mail: a@niuxuewei.com
-- 个人主页: http://www.niuxuewei.com
+- E-Mail: a@nxw.name
+- Homepage: http://www.nxw.name
